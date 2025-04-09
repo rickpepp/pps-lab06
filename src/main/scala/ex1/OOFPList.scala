@@ -49,11 +49,14 @@ enum List[A]:
   def length(): Int = foldLeft(0)((a, _) => a + 1)
   def zipWithIndex: List[(A, Int)] = foldRight(Nil())((v, l) => l.::(v, l.head.getOrElse(0,this.length())._2 - 1))
   def partition(predicate: A => Boolean): (List[A], List[A]) =
-    (this.filter(predicate), this.filter(x => !(predicate.apply(x))))
-  def span(predicate: A => Boolean): (List[A], List[A]) =
-    foldLeft((Nil(),Nil()))((p, v) => if predicate.apply(v) && p._1 == Nil() then (p._1.::(v), p._2) else (p._1, p._2.append(Nil().::(v))))
-  def takeRight(n: Int): List[A] = ???
-  def collect(predicate: PartialFunction[A, A]): List[A] = ???
+    (this.filter(predicate), this.filter(x => !(predicate(x))))
+  def span(predicate: A => Boolean): (List[A], List[A]) = foldLeft((Nil(), Nil()))((p, v) => p match
+      case (_, Nil()) if predicate(v) => (p._1.append(Nil().::(v)), Nil())
+      case _ => (p._1, p._2.append(Nil().::(v)))
+    )
+  def takeRight(n: Int): List[A] = foldRight(Nil())((v,l) => if l.length() < n then l.::(v) else l)
+  def collect(predicate: PartialFunction[A, A]): List[A] = this.filter(predicate.isDefinedAt).map(predicate)
+
 // Factories
 object List:
 
@@ -74,7 +77,7 @@ object Test extends App:
   println(reference.zipWithIndex) // List((1, 0), (2, 1), (3, 2), (4, 3))
   println(reference.partition(_ % 2 == 0)) // (List(2, 4), List(1, 3))
   println(reference.span(_ % 2 != 0)) // (List(1), List(2, 3, 4))
-  /*println(reference.span(_ < 3)) // (List(1, 2), List(3, 4))
+  println(reference.span(_ < 3)) // (List(1, 2), List(3, 4))
   println(reference.reduce(_ + _)) // 10
   println(List(10).reduce(_ + _)) // 10
   println(reference.takeRight(3)) // List(2, 3, 4)

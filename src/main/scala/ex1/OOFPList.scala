@@ -54,7 +54,7 @@ enum List[A]:
       case (_, Nil()) if predicate(v) => (p._1.append(Nil().::(v)), Nil())
       case _ => (p._1, p._2.append(Nil().::(v)))
     )
-  def takeRight(n: Int): List[A] = foldRight(Nil())((v,l) => if l.length() < n then l.::(v) else l)
+  def takeRight(n: Int): List[A] = foldRight(Nil())((v, l) => if l.length() < n then l.::(v) else l)
   def collect(predicate: PartialFunction[A, A]): List[A] = this.filter(predicate.isDefinedAt).map(predicate)
 
 // Factories

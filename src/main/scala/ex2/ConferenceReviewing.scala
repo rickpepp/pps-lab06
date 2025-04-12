@@ -87,7 +87,11 @@ object ConferenceReviewing:
           Question.FINAL -> fin))
     def orderedScores(article: Int, question: Question): List[Int] =
       reviews.filter(_._1 == article).map(_._2(question)).sorted
-    def averageFinalScore(article: Int): Double = ???
+    def averageFinalScore(article: Int): Double =
+      reviews.filter(_._1 == article).map(_._2(Question.FINAL)).average
     def acceptedArticles(): Set[Int] = ???
     def sortedAcceptedArticles(): List[(Int, Double)] = ???
     def averageWeightedFinalScoreMap(): Map[Int, Double] = ???
+    extension (l: List[Int])
+      private def average: Double =
+        l.foldLeft((0.0, 1))((acc, v) => ((acc._1 + (v - acc._1) / acc._2), acc._2 + 1))._1

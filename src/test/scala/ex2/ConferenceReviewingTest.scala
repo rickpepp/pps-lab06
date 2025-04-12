@@ -68,12 +68,12 @@ class ConferenceReviewingTest:
     assertEquals(cr.averageFinalScore(4), 7.0, 0.01);
     assertEquals(cr.averageFinalScore(5), 10.0, 0.01);
     
-  /*@Test
+  @Test
   def testAcceptedArticles(): Unit =
     // solo gli articoli 1,2,4 vanno accettati, avendo media finale >=5 e almeno un voto su RELEVANCE >= 8
-    assertEquals(cr.acceptedArticles(), new HashSet <> (Arrays.asList(1, 2, 4)));
+    assertEquals(cr.acceptedArticles(), Set(1, 2, 4));
     
-  @Test
+  /*@Test
   def testSortedAcceptedArticles(): Unit =
     // articoli accettati, e loro voto finale medio
     assertEquals(cr.sortedAcceptedArticles(), Arrays.asList(new Pair <> (4, 7.0), new Pair <> (2, 7.5), new Pair <> (1, 8.5)));

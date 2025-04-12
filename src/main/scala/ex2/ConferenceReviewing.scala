@@ -89,7 +89,9 @@ object ConferenceReviewing:
       reviews.filter(_._1 == article).map(_._2(question)).sorted
     def averageFinalScore(article: Int): Double =
       reviews.filter(_._1 == article).map(_._2(Question.FINAL)).average
-    def acceptedArticles(): Set[Int] = ???
+    def acceptedArticles(): Set[Int] =
+      reviews.filter(e => averageFinalScore(e._1) > 5.0 &
+        e._2(Question.RELEVANCE) >= 8).map(_._1).toSet
     def sortedAcceptedArticles(): List[(Int, Double)] = ???
     def averageWeightedFinalScoreMap(): Map[Int, Double] = ???
     extension (l: List[Int])
